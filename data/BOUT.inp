@@ -44,13 +44,11 @@ T_i0                  = 20                  # eV
 m_i                   = 2                   # Atomic Units
 q                     = 7                   # Dimensionless
 R_c                   = 1.5                 # m
-n_0                   = 0.5e13              # cm^-3
+n_0                   = 0.5e19              # m^-3
 Z                     = 1                   # Dimensionless
 loglambda             = -1                  # Dimensionless
-mu_n_sol   	      = 0.005
-mu_n_core   	      = 0.005
-mu_vort_sol   	      = 0.005
-mu_vort_core   	      = 0.005
+mu_n0   	      = 0.005
+mu_vort0   	      = 0.005
 n_bg                  = -1                  # Disable terms that maintain constant density background
 T_bg                  = -1                  # Disable terms that maintain constant electron temperature background
 	
