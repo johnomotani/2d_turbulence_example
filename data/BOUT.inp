@@ -1,0 +1,80 @@
+timestep              = 10e-6 * storm:Omega_i # Output timestep, set in normalised units to give 10 microsecond steps
+nout                  = 300                   # Aim for at least 3 ms of output, allowing 2 ms to reach saturated statistical steady state
+
+wall_limit = 1  # Stop cleanly before reaching <wall_limit> hours
+
+MZ                    = 256                 # Number of Z points
+zmin                  = 0
+zmax                  = mesh:Lz/2./pi       # 1.5915*2pi = 10, z is fracs of 2pi
+
+mxg                   = 1
+myg                   = 0                   # No need for Y communications
+
+[mesh:ddx]
+first                 = C2
+second                = C2
+upwind                = C2
+flux                  = SPLIT
+
+[mesh:ddz]
+first                 = C2
+second                = C2
+upwind                = C2
+flux                  = SPLIT
+
+[mesh]
+Ly                    = 5500.0
+Lx                    = 150.0
+Lz                    = 100.0
+
+nx                    = 384 + 2*mxg        # including guard cells
+ny                    = 1                  # excluding guard cells
+dx                    = Lx / (nx - 2*mxg)
+
+[solver]
+mxstep = 100000000       # max steps before result is deemed not to converge
+ATOL =   1e-12          # Absolute tolerance
+RTOL =   1e-7           # Relative tolerance
+
+[storm]
+L                     = mesh:Ly
+B_0                   = 0.5                 # Tesla 
+T_e0                  = 20                  # eV
+T_i0                  = 20                  # eV
+m_i                   = 2                   # Atomic Units
+q                     = 7                   # Dimensionless
+R_c                   = 1.5                 # m
+n_0                   = 0.5e13              # cm^-3
+Z                     = 1                   # Dimensionless
+loglambda             = -1                  # Dimensionless
+mu_n_sol   	      = 0.005
+mu_n_core   	      = 0.005
+mu_vort_sol   	      = 0.005
+mu_vort_core   	      = 0.005
+n_bg                  = -1                  # Disable terms that maintain constant density background
+T_bg                  = -1                  # Disable terms that maintain constant electron temperature background
+	
+bracket               = 2                   # 0 = std, 1 = simple, 2 = arakawa
+isothermal            = true                # switch for isothermal simulations
+boussinesq            = true                # switch for solution with boussinesq approx (without requires multigrid)
+blob_sim              = false               # switch for blob_sim
+sheath_linear         = false               # switch for linearising sheath boundary conditions
+initial_noise         = true
+
+# constants and derived quantities - not used by storm2d, but may be useful for calculations in this input file
+e = 1.602176565e-19
+u = 1.66053892e-27
+Omega_i = e * B_0 / (m_i * u)
+
+[All]
+bndry_all = neumann
+
+[n]
+function = 1.0
+
+[vort]
+function = 0.
+
+##################################################################
+[S]       # Density source
+function = 0.03*gauss(150*x-30, 5*1.414213562)
